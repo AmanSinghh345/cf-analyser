@@ -407,7 +407,36 @@ function App() {
         }
       </h2>
     </div>
+
+
   </div>
+  <div
+  style={{
+    marginTop: "20px",
+    background: "#0f172a",
+    padding: "24px",
+    borderRadius: "20px",
+    border: "1px solid #334155",
+  }}
+>
+  <h3
+    style={{
+      marginBottom: "10px",
+    }}
+  >
+    Profile Analysis
+  </h3>
+
+  <p
+    style={{
+      color: "#cbd5e1",
+      lineHeight: "1.8",
+      fontSize: "16px",
+    }}
+  >
+    {userData.insights.summary}
+  </p>
+</div>
 </div>
 
 

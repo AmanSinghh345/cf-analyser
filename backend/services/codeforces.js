@@ -100,6 +100,25 @@ const comfortRange = {
   max: solvedRatings[highIndex],
 };
 
+let summary = "";
+
+if (hardestSolved >= 3000) {
+  summary =
+    "Elite problem solver with consistent performance on very high-rated problems.";
+} else if (hardestSolved >= 2400) {
+  summary =
+    "Strong advanced solver comfortable with difficult problems.";
+} else if (hardestSolved >= 1900) {
+  summary =
+    "Solid competitive programmer with good mid-high difficulty coverage.";
+} else if (hardestSolved >= 1400) {
+  summary =
+    "Developing problem-solving ability with growing consistency.";
+} else {
+  summary =
+    "Focused mostly on beginner-friendly problems.";
+}
+
   return {
     handle,
 
@@ -118,10 +137,11 @@ const comfortRange = {
 
     recentSolved: recentSolved.slice(0, 10),
 
-    insights: {
+   insights: {
   strongestRange,
   hardestSolved,
   comfortRange,
+  summary,
 },
   };
 }
