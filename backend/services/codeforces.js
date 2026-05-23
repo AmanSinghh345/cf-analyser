@@ -11,6 +11,19 @@ async function getUserAnalytics(handle) {
     `https://codeforces.com/api/user.info?handles=${handle}`
   );
 
+  const ratingResponse = await axios.get(
+  `https://codeforces.com/api/user.rating?handle=${handle}`
+);
+
+const contestHistory =
+  ratingResponse.data.result.map(
+    (contest) => ({
+      contestName: contest.contestName,
+      rating: contest.newRating,
+      rank: contest.rank,
+    })
+  );
+
   const submissions =
     submissionsResponse.data.result;
 
@@ -143,6 +156,7 @@ if (hardestSolved >= 3000) {
   comfortRange,
   summary,
 },
+contestHistory,
   };
 }
 
