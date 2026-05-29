@@ -565,12 +565,12 @@ console.log("chartData", chartData);
                   }}
                 >
                   <h4>Contests Played</h4>
-                  <h2>{userData.contestHistory.length}</h2>
+                  <h2>{userData.contestHistory.length || 0}</h2>
                 </div>
               </div>
               <div style={{ height: "400px" }}>
                 <ResponsiveContainer>
-                  <LineChart data={userData.contestHistory}>
+                  <LineChart data={userData.contestHistory || []}>
                     <CartesianGrid strokeDasharray="3 3" />
 
                     <XAxis hide />
