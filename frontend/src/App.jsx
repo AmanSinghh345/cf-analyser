@@ -568,7 +568,7 @@ console.log("chartData", chartData);
                   <h2>{userData.contestHistory?.length || 0}</h2>
                   {/* debug log */}
                   console.log("contestHistory", userData?.contestHistory);
-
+                  console.log("contestHistory", userData?.contestHistory);
 
                 </div>
               </div>
