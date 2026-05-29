@@ -20,7 +20,7 @@ function Compare() {
 
   const [loading, setLoading] = useState(false);
 
-  async function compareProfiles() {
+  async function compareUsers() {
     if (!handle1.trim() || !handle2.trim()) return;
 
     try {
@@ -39,10 +39,69 @@ function Compare() {
       setUser2(res2.data);
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch users");
+      alert("User not found");
     } finally {
       setLoading(false);
     }
+  }
+
+  function ComparisonCard({
+    title,
+    value1,
+    value2,
+  }) {
+    const winner1 = value1 > value2;
+    const winner2 = value2 > value1;
+
+    return (
+      <div
+        style={{
+          background: "#0f172a",
+          padding: "20px",
+          borderRadius: "20px",
+        }}
+      >
+        <h3 style={{ marginBottom: "20px" }}>
+          {title}
+        </h3>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "20px",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                color: winner1
+                  ? "#22c55e"
+                  : "white",
+              }}
+            >
+              {value1}
+            </h2>
+
+            {winner1 && <p>🏆 Winner</p>}
+          </div>
+
+          <div>
+            <h2
+              style={{
+                color: winner2
+                  ? "#22c55e"
+                  : "white",
+              }}
+            >
+              {value2}
+            </h2>
+
+            {winner2 && <p>🏆 Winner</p>}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -58,7 +117,7 @@ function Compare() {
     >
       <div
         style={{
-          maxWidth: "1200px",
+          maxWidth: "1100px",
           margin: "0 auto",
         }}
       >
@@ -79,10 +138,10 @@ function Compare() {
             marginBottom: "40px",
           }}
         >
-          Compare achievements of two Codeforces users
+          Compare two Codeforces users
         </p>
 
-        {/* SEARCH */}
+        {/* INPUTS */}
         <div
           style={{
             display: "flex",
@@ -96,7 +155,9 @@ function Compare() {
             type="text"
             placeholder="First handle"
             value={handle1}
-            onChange={(e) => setHandle1(e.target.value)}
+            onChange={(e) =>
+              setHandle1(e.target.value)
+            }
             style={inputStyle}
           />
 
@@ -104,21 +165,15 @@ function Compare() {
             type="text"
             placeholder="Second handle"
             value={handle2}
-            onChange={(e) => setHandle2(e.target.value)}
+            onChange={(e) =>
+              setHandle2(e.target.value)
+            }
             style={inputStyle}
           />
 
           <button
-            onClick={compareProfiles}
-            style={{
-              padding: "15px 24px",
-              borderRadius: "14px",
-              border: "none",
-              background: "#9333ea",
-              color: "white",
-              cursor: "pointer",
-              fontWeight: "bold",
-            }}
+            onClick={compareUsers}
+            style={buttonStyle}
           >
             Compare
           </button>
@@ -131,29 +186,24 @@ function Compare() {
         )}
 
         {user1 && user2 && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(350px,1fr))",
-              gap: "20px",
-            }}
-          >
-            {[user1, user2].map((user, index) => (
-              <div
-                key={index}
-                style={{
-                  background: "#1e293b",
-                  borderRadius: "24px",
-                  padding: "30px",
-                }}
-              >
+          <>
+            {/* USER HEADER */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fit,minmax(300px,1fr))",
+                gap: "20px",
+                marginBottom: "30px",
+              }}
+            >
+              {[user1, user2].map((user, idx) => (
                 <div
+                  key={idx}
                   style={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center",
-                    marginBottom: "20px",
+                    background: "#1e293b",
+                    padding: "30px",
+                    borderRadius: "24px",
                   }}
                 >
                   <img
@@ -166,97 +216,76 @@ function Compare() {
                     }}
                   />
 
-                  <div>
-                    <h2
-                      style={{
-                        color: getRatingColor(
-                          user.profile.rating
-                        ),
-                      }}
-                    >
-                      {user.handle}
-                    </h2>
+                  <h2
+                    style={{
+                      color: getRatingColor(
+                        user.profile.rating
+                      ),
+                    }}
+                  >
+                    {user.handle}
+                  </h2>
 
-                    <p>
-                      Rank: {user.profile.rank}
-                    </p>
+                  <p>
+                    Rank: {user.profile.rank}
+                  </p>
 
-                    <p>
-                      Rating: {user.profile.rating}
-                    </p>
-                  </div>
+                  <p>
+                    Rating: {user.profile.rating}
+                  </p>
+
+                  <p>
+                    Max Rating:{" "}
+                    {user.profile.maxRating}
+                  </p>
                 </div>
+              ))}
+            </div>
 
-                <div
-                  style={{
-                    display: "grid",
-                    gap: "12px",
-                  }}
-                >
-                  <CompareCard
-                    title="Max Rating"
-                    value={user.profile.maxRating}
-                  />
+            {/* COMPARISON */}
+            <div
+              style={{
+                display: "grid",
+                gap: "20px",
+              }}
+            >
+              <ComparisonCard
+                title="Rating"
+                value1={user1.profile.rating}
+                value2={user2.profile.rating}
+              />
 
-                  <CompareCard
-                    title="Max Rank"
-                    value={user.profile.maxRank}
-                  />
+              <ComparisonCard
+                title="Max Rating"
+                value1={user1.profile.maxRating}
+                value2={user2.profile.maxRating}
+              />
 
-                  <CompareCard
-                    title="Contribution"
-                    value={user.profile.contribution}
-                  />
+              <ComparisonCard
+                title="Total Solved"
+                value1={user1.totalSolved}
+                value2={user2.totalSolved}
+              />
 
-                  <CompareCard
-                    title="Total Solved"
-                    value={user.totalSolved}
-                  />
+              <ComparisonCard
+                title="Contribution"
+                value1={user1.profile.contribution}
+                value2={user2.profile.contribution}
+              />
 
-                  <CompareCard
-                    title="Hardest Solved"
-                    value={
-                      user.insights.hardestSolved
-                    }
-                  />
-
-                  <CompareCard
-                    title="Contests Played"
-                    value={
-                      user.contestHistory?.length || 0
-                    }
-                  />
-
-                  <CompareCard
-                    title="Strongest Zone"
-                    value={`${user.insights.strongestRange.min} - ${user.insights.strongestRange.max}`}
-                  />
-
-                  <CompareCard
-                    title="Comfort Range"
-                    value={`${user.insights.comfortRange.min} - ${user.insights.comfortRange.max}`}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+              <ComparisonCard
+                title="Hardest Solved"
+                value1={
+                  user1.insights.hardestSolved
+                }
+                value2={
+                  user2.insights.hardestSolved
+                }
+              />
+            </div>
+          </>
         )}
       </div>
-    </div>
-  );
-}
-
-function CompareCard({ title, value }) {
-  return (
-    <div
-      style={{
-        background: "#0f172a",
-        padding: "16px",
-        borderRadius: "16px",
-      }}
-    >
-      <h4>{title}</h4>
-      <h2>{value}</h2>
     </div>
   );
 }
@@ -269,6 +298,16 @@ const inputStyle = {
   background: "#1e293b",
   color: "white",
   outline: "none",
+};
+
+const buttonStyle = {
+  padding: "15px 24px",
+  borderRadius: "14px",
+  border: "none",
+  background: "#9333ea",
+  color: "white",
+  cursor: "pointer",
+  fontWeight: "bold",
 };
 
 export default Compare;
