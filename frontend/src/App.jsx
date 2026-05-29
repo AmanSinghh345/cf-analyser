@@ -385,22 +385,33 @@ console.log("chartData", chartData);
                 </ResponsiveContainer>
               </div> */}
 
-                <div style={{ height: "420px" }}>
-                  <BarChart width={900} height={400} data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="rating" />  
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="solved">  
-                      {chartData.map((entry, index) => (
-                        <Cell
-                          key={index}
-                          fill={getRatingColor(Number(entry.rating))}
-                        />
-                      ))} 
-                    </Bar>
-                  </BarChart>
-                </div>
+             <div style={{ width: "100%", height: "400px" }}>
+  <ResponsiveContainer width="100%" height="100%">
+    <LineChart data={userData?.contestHistory || []}>
+      <CartesianGrid strokeDasharray="3 3" />
+
+      <XAxis hide />
+
+      <YAxis />
+
+      <Tooltip
+        formatter={(value) => [value, "Rating"]}
+        labelFormatter={(_, payload) =>
+          payload?.[0]?.payload?.contestName || ""
+        }
+      />
+
+      <Line
+        type="monotone"
+        dataKey="rating"
+        stroke={getRatingColor(userData.profile.rating)}
+        strokeWidth={4}
+        dot={false}
+        activeDot={{ r: 7 }}
+      />
+    </LineChart>
+  </ResponsiveContainer>
+</div>
 
             </div>
 
