@@ -366,7 +366,7 @@ console.log("chartData", chartData);
             >
               <h2 style={{ marginBottom: "20px" }}>Rating Wise Solved</h2>
 
-              <div style={{ height: "420px" }}>
+              {/* <div style={{ height: "420px" }}>
                 <ResponsiveContainer>
                   <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -383,7 +383,25 @@ console.log("chartData", chartData);
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
-              </div>
+              </div> */}
+
+                <div style={{ height: "420px" }}>
+                  <BarChart width={900} height={400} data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="rating" />  
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="solved">  
+                      {chartData.map((entry, index) => (
+                        <Cell
+                          key={index}
+                          fill={getRatingColor(Number(entry.rating))}
+                        />
+                      ))} 
+                    </Bar>
+                  </BarChart>
+                </div>
+
             </div>
 
             <div
