@@ -565,7 +565,11 @@ console.log("chartData", chartData);
                   }}
                 >
                   <h4>Contests Played</h4>
-                  <h2>{userData.contestHistory.length || 0}</h2>
+                  <h2>{userData.contestHistory?.length || 0}</h2>
+                  {/* debug log */}
+                  console.log("contestHistory", userData?.contestHistory);
+
+
                 </div>
               </div>
               <div style={{ height: "400px" }}>
