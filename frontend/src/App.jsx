@@ -74,7 +74,14 @@ setUserData(res.data);
         solved,
       }))
     : [];
-
+    //debugging
+      console.log("ratingWiseSolved", userData?.ratingWiseSolved);
+console.log("recentSolved", userData?.recentSolved);
+console.log("insights", userData?.insights);
+console.log("strongestRange", userData?.insights?.strongestRange);
+console.log("comfortRange", userData?.insights?.comfortRange);
+console.log("chartData", chartData);
+    //...
   return (
     <div
       style={{
