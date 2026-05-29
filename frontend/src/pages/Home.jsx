@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   BarChart,
@@ -23,13 +24,12 @@ function getRatingColor(rating) {
   return "#ef4444";
 }
 
-function App() {
+function Home() {
+    const navigate = useNavigate();
   const [handle, setHandle] = useState("");
-  const [compareHandle, setCompareHandle] = useState("");
-  const [compareData, setCompareData] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+    
   async function fetchUser() {
     if (!handle.trim()) return;
 
@@ -40,19 +40,23 @@ function App() {
         `${import.meta.env.VITE_API_URL}/api/user/${handle}`
       );
 
-      const compareReq = compareHandle.trim()
-        ? axios.get(
-            `${import.meta.env.VITE_API_URL}/api/user/${compareHandle}`
-          )
-        : Promise.resolve(null);
+      // const compareReq = compareHandle.trim()
+      //   ? axios.get(
+      //       `${import.meta.env.VITE_API_URL}/api/user/${compareHandle}`
+      //     )
+      //   : Promise.resolve(null);
 
-      const [mainRes, compareRes] = await Promise.all([
-        mainReq,
-        compareReq,
-      ]);
+      // const [mainRes, compareRes] = await Promise.all([
+      //   mainReq,
+      //   compareReq,
+      // ]);
 
+      // setUserData(mainRes.data);
+      // setCompareData(compareRes?.data || null);
+
+      const mainRes = await mainReq;
       setUserData(mainRes.data);
-      setCompareData(compareRes?.data || null);
+
     } catch (err) {
       console.error(err);
       alert("User not found");
@@ -61,7 +65,7 @@ function App() {
     }
   }
 
-  const chartData = userData
+  const chartData = userData?.ratingWiseSolved
     ? Object.entries(userData.ratingWiseSolved).map(
         ([rating, solved]) => ({
           rating,
@@ -133,8 +137,22 @@ function App() {
               outline: "none",
             }}
           />
-
-          <input
+          
+          <button
+  onClick={() => navigate("/compare")}
+  style={{
+    padding: "15px 24px",
+    borderRadius: "14px",
+    border: "none",
+    background: "#9333ea",
+    color: "white",
+    cursor: "pointer",
+    fontWeight: "bold",
+  }}
+>
+  Compare Profiles
+</button>
+          {/* <input
             type="text"
             placeholder="Compare with..."
             value={compareHandle}
@@ -149,7 +167,7 @@ function App() {
               color: "white",
               outline: "none",
             }}
-          />
+          /> */}
 
           <button
             onClick={fetchUser}
@@ -409,7 +427,7 @@ function App() {
                   gap: "15px",
                 }}
               >
-                {userData.recentSolved.map(
+                {userData.recentSolved?.map(
                   (problem, index) => (
                     <div
                       key={index}
@@ -464,4 +482,4 @@ function Card({ title, value }) {
   );
 }
 
-export default App;
+export default Home;
