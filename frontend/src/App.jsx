@@ -39,6 +39,18 @@ function App() {
       const mainReq = axios.get(
         `${import.meta.env.VITE_API_URL}/api/user/${handle}`,
       );
+      //comment 
+
+      const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/user/${handle}`
+);
+
+console.log(res.data);
+
+setUserData(res.data);
+
+      // ....
+
 
       const compareReq = compareHandle.trim()
         ? axios.get(`${import.meta.env.VITE_API_URL}/api/user/${compareHandle}`)
