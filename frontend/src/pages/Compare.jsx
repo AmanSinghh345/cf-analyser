@@ -1,6 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
 
+import{
+  LineChart,
+Line,
+XAxis,
+YAxis,
+Tooltip,
+CartesianGrid,
+ResponsiveContainer,
+} from 'recharts';
+
 function getRatingColor(rating) {
   if (rating < 1200) return "#9ca3af";
   if (rating < 1400) return "#22c55e";
@@ -10,6 +20,8 @@ function getRatingColor(rating) {
   if (rating < 2400) return "#f97316";
   return "#ef4444";
 }
+
+
 
 function Compare() {
   const [handle1, setHandle1] = useState("");
@@ -65,13 +77,13 @@ function Compare() {
           {title}
         </h3>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "20px",
-          }}
-        >
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "20px",
+  }}
+>
           <div>
             <h2
               style={{
@@ -101,6 +113,8 @@ function Compare() {
           </div>
         </div>
       </div>
+
+
     );
   }
 
@@ -283,6 +297,67 @@ function Compare() {
                 }
               />
             </div>
+            
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(320px, 1fr))",
+    gap: "20px",
+    marginTop: "30px",
+  }}
+>
+  {[user1, user2].map((user, index) => (
+    <div
+      key={index}
+      style={{
+        background: "#1e293b",
+        padding: "30px",
+        borderRadius: "24px",
+      }}
+    >
+      <h2 style={{ marginBottom: "20px" }}>
+        {user.handle} Rating Progress
+      </h2>
+
+      <div style={{ height: "400px" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={user.contestHistory || []}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+
+            <XAxis hide />
+
+            <YAxis />
+
+            <Tooltip
+              formatter={(value) => [
+                value,
+                "Rating",
+              ]}
+              labelFormatter={(_, payload) =>
+                payload?.[0]?.payload
+                  ?.contestName || ""
+              }
+            />
+
+            <Line
+              type="monotone"
+              dataKey="rating"
+              stroke={getRatingColor(
+                user.profile.rating
+              )}
+              strokeWidth={4}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  ))}
+</div>
+
           </>
         )}
       </div>
